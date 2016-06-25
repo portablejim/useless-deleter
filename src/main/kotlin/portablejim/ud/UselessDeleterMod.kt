@@ -1,12 +1,15 @@
 package portablejim.ud
 
 import net.minecraft.creativetab.CreativeTabs
+import net.minecraft.item.Item
+import net.minecraft.item.ItemStack
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.SidedProxy
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import net.minecraftforge.fml.common.registry.GameRegistry
+import net.minecraftforge.oredict.ShapedOreRecipe
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import portablejim.ud.items.FilteredDeleter
@@ -38,7 +41,6 @@ object UselessDeleterMod {
         // Items
         filteredDeleter = FilteredDeleter("filtered_deleter")
 
-        filteredDeleter.creativeTab = CreativeTabs.TOOLS
         filteredDeleter.unlocalizedName = "${MODID}.filtered"
 
         GameRegistry.register(filteredDeleter)
@@ -49,12 +51,11 @@ object UselessDeleterMod {
 
     @Mod.EventHandler
     fun init(evt: FMLInitializationEvent) {
-        LogManager.getLogger().info("INIT")
+        GameRegistry.addRecipe(ShapedOreRecipe(ItemStack(filteredDeleter), "SSS", "SCS", "SSS", 'S', "cobblestone", 'c', "chestWood"))
     }
 
     @Mod.EventHandler
     fun postinit(evt: FMLPostInitializationEvent) {
-        LogManager.getLogger().info("POST")
     }
 
 }
