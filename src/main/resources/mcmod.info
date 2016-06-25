@@ -1,0 +1,15 @@
+[
+{
+  "modid": "uselessdeleter",
+  "name": "Useless Deleter",
+  "description": "",
+  "version": "${version}",
+  "url": "http://minecraft.curseforge.com/mc-mods/<something>/",
+  "updateUrl": "",
+  "authors": ["portablejim"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": ["Forge"]
+}
+]

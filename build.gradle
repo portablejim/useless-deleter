@@ -109,6 +109,24 @@ dependencies {
     shade files('libs/kotlin-adapter-1.0.2+1.10.jar')
 }
 
+jar {
+    // Shading
+    configurations.shade.each { dep ->
+        from(project.zipTree(dep)){
+            exclude 'META-INF', 'META-INF/**'
+        }
+    }
+}
+
+reobf {
+    jar {
+        // Kotlin+Adapter shading
+        extraLines += [ "PK: kotlin portablejim/ud/repack/kotlin" ]
+        extraLines += [ "PK: org/jetbrains/annotations portablejim/ud/repack/annotations" ]
+        extraLines += [ "PK: io/drakon/forge/kotlin portablejim/ud/repack/adapter" ]
+    }
+}
+
 uploadArchives {
     dependsOn 'reobf'
 
