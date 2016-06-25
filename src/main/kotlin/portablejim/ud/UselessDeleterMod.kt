@@ -1,17 +1,19 @@
 package portablejim.ud
 
-import net.minecraft.creativetab.CreativeTabs
-import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
+import net.minecraftforge.common.capabilities.Capability
+import net.minecraftforge.common.capabilities.CapabilityInject
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.SidedProxy
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import net.minecraftforge.fml.common.registry.GameRegistry
+import net.minecraftforge.items.IItemHandler
 import net.minecraftforge.oredict.ShapedOreRecipe
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
+import portablejim.ud.capabilities.UsedCapabilities
 import portablejim.ud.items.FilteredDeleter
 import portablejim.ud.proxy.CommonProxy
 
@@ -30,6 +32,9 @@ object UselessDeleterMod {
 
     // Items
     lateinit var filteredDeleter: FilteredDeleter
+
+    // Capabilities
+    lateinit var INVENTORY_CAP: Capability<IItemHandler>
 
     var log: Logger = LogManager.getLogger(MODID)
 
@@ -51,6 +56,9 @@ object UselessDeleterMod {
 
     @Mod.EventHandler
     fun init(evt: FMLInitializationEvent) {
+        // Hack because I don't have kotlin introspection.
+        INVENTORY_CAP = UsedCapabilities.ITEM_HANDLER_CAPABILITY
+
         GameRegistry.addRecipe(ShapedOreRecipe(ItemStack(filteredDeleter), "SSS", "SCS", "SSS", 'S', "cobblestone", 'c', "chestWood"))
     }
 
