@@ -1,6 +1,7 @@
 package portablejim.ud
 
 import net.minecraft.item.ItemStack
+import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.common.capabilities.CapabilityInject
 import net.minecraftforge.fml.common.Mod
@@ -59,7 +60,9 @@ object UselessDeleterMod {
         // Hack because I don't have kotlin introspection.
         INVENTORY_CAP = UsedCapabilities.ITEM_HANDLER_CAPABILITY
 
-        GameRegistry.addRecipe(ShapedOreRecipe(ItemStack(filteredDeleter), "SSS", "SCS", "SSS", 'S', "cobblestone", 'c', "chestWood"))
+        MinecraftForge.EVENT_BUS.register(filteredDeleter)
+
+        GameRegistry.addRecipe(ShapedOreRecipe(ItemStack(filteredDeleter), "SSS", "SCS", "SSS", 'S', "cobblestone", 'C', "chestWood"))
     }
 
     @Mod.EventHandler
