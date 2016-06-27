@@ -4,6 +4,7 @@ import net.minecraft.item.ItemStack
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.common.capabilities.CapabilityInject
+import net.minecraftforge.common.config.Configuration
 import net.minecraftforge.common.network.ForgeNetworkHandler
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.SidedProxy
@@ -17,17 +18,20 @@ import net.minecraftforge.oredict.ShapedOreRecipe
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import portablejim.ud.capabilities.UsedCapabilities
+import portablejim.ud.config.Config
 import portablejim.ud.items.FilteredDeleter
 import portablejim.ud.proxy.CommonProxy
 import portablejim.ud.storage.GuiHandler
 
+const val MOD_ID: String = "uselessdeleter"
+
 /**
  * UselessDeleter Mod file.
  */
-@Mod(modid = UselessDeleterMod.MODID, modLanguage = "kotlin", modLanguageAdapter = "io.drakon.forge.kotlin.KotlinAdapter")
+@Mod(modid = MOD_ID,
+        modLanguage = "kotlin", modLanguageAdapter = "io.drakon.forge.kotlin.KotlinAdapter",
+        guiFactory = "portablejim.ud.config.GuiFactory")
 object UselessDeleterMod {
-    const val MODID: String = "uselessdeleter"
-
     @SidedProxy(
             clientSide = "portablejim.ud.proxy.ClientProxy",
             serverSide = "portablejim.ud.proxy.CommonProxy"
@@ -38,21 +42,25 @@ object UselessDeleterMod {
     lateinit var filteredDeleter: FilteredDeleter
 
     lateinit var guiHandler: GuiHandler
+    lateinit var config: Configuration
 
     // Capabilities
     lateinit var INVENTORY_CAP: Capability<IItemHandler>
 
-    var log: Logger = LogManager.getLogger(MODID)
+    var log: Logger = LogManager.getLogger(MOD_ID)
 
     @Mod.EventHandler
     fun preinit(evt: FMLPreInitializationEvent) {
         //log = evt.modLog
         log.info("PRE")
 
+        config = Configuration(evt.suggestedConfigurationFile)
+        Config.syncConfig(config)
+
         // Items
         filteredDeleter = FilteredDeleter("filtered_deleter")
 
-        filteredDeleter.unlocalizedName = "${MODID}.filtered"
+        filteredDeleter.unlocalizedName = "${MOD_ID}.filtered"
 
         GameRegistry.register(filteredDeleter)
 
