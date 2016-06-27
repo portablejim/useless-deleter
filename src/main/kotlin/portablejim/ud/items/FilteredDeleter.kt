@@ -2,8 +2,6 @@ package portablejim.ud.items
 
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.init.Blocks
-import net.minecraft.init.Items
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
@@ -14,11 +12,8 @@ import net.minecraft.world.World
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent
 import net.minecraftforge.fml.common.eventhandler.Event
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
-import net.minecraftforge.fml.common.gameevent.PlayerEvent
-import net.minecraftforge.fml.common.registry.GameRegistry
 import net.minecraftforge.items.IItemHandler
 import portablejim.ud.UselessDeleterMod
-import scala.tools.nsc.interpreter.JavapClass
 import java.util.*
 
 /**

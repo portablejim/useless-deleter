@@ -6,10 +6,6 @@ import net.minecraft.inventory.ClickType
 import net.minecraft.inventory.Container
 import net.minecraft.inventory.Slot
 import net.minecraft.item.ItemStack
-import net.minecraft.util.ResourceLocation
-import net.minecraftforge.items.ItemStackHandler
-import net.minecraftforge.items.SlotItemHandler
-import portablejim.ud.items.FilteredDeleter
 import portablejim.ud.storage.util.SlotDisabled
 import portablejim.ud.storage.util.SlotFilter
 
@@ -126,21 +122,6 @@ class FilterContainer(playerInventory: InventoryPlayer, val filterHandler: Filte
         val stack = slot.stack
         val stackSingle = stack!!.copy()
         stackSingle.stackSize = 1
-
-        val startIndex: Int
-        val endIndex: Int
-
-        /*for(curSlot in 0..8) {
-            if(inventoryItemStacks[curSlot] != null) {
-                if(inventoryItemStacks[curSlot].isItemEqual(stack)) {
-                    break;
-                }
-                else { }
-            }
-            else {
-                inventorySlots[curSlot].putStack(stackSingle)
-            }
-        }*/
 
         return null
     }
