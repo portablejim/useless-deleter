@@ -30,7 +30,7 @@ const val MOD_ID: String = "uselessdeleter"
  */
 @Mod(modid = MOD_ID,
         modLanguage = "kotlin", modLanguageAdapter = "io.drakon.forge.kotlin.KotlinAdapter",
-        guiFactory = "portablejim.ud.config.GuiFactory")
+        guiFactory = "portablejim.ud.config.ConfigGuiFactory")
 object UselessDeleterMod {
     @SidedProxy(
             clientSide = "portablejim.ud.proxy.ClientProxy",
