@@ -58,7 +58,7 @@ class FilterItemHandler(val currentItem: ItemStack): IItemHandler {
 
     override fun extractItem(slot: Int, amount: Int, simulate: Boolean): ItemStack? {
         if(!simulate) {
-            filterList.removeAt(slot)
+            filterList.set(slot, null)
         }
         return null
     }

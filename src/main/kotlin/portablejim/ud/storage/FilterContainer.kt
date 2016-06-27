@@ -76,7 +76,7 @@ class FilterContainer(playerInventory: InventoryPlayer, val filterHandler: Filte
                     copy.stackSize = 1
                     slot.putStack(copy)
                 } else if (slot.stack != null) {
-                    slot.putStack(null)
+                    slot.decrStackSize(1)
                 }
 
                 detectAndSendChanges()
@@ -85,6 +85,29 @@ class FilterContainer(playerInventory: InventoryPlayer, val filterHandler: Filte
             }
 
             return null
+        }
+        else {
+            val source = inventorySlots[slotId].stack
+            if(mode == ClickType.QUICK_MOVE) {
+                if(source != null) {
+                    for (curSlot in 0..8) {
+                        if (inventorySlots[curSlot].stack != null) {
+                            if (inventorySlots[curSlot].stack?.isItemEqual(source) ?: false) {
+                                break;
+                            } else {
+                            }
+                        } else {
+                            val stackSingle = source.copy()
+                            if (stackSingle != null) {
+                                stackSingle.stackSize = 1
+                                inventorySlots[curSlot].putStack(stackSingle)
+                                break
+                            }
+                        }
+                    }
+                }
+                return source
+            }
         }
 
         return super.slotClick(slotId, clickedButton, mode, playerIn)
@@ -96,41 +119,29 @@ class FilterContainer(playerInventory: InventoryPlayer, val filterHandler: Filte
         }
 
         val slot = this.inventorySlots[slotIndex]
-        if (slot == null || !slot.hasStack) {
+        if (slot == null || !slot.hasStack || slot.stack == null) {
             return null
         }
 
         val stack = slot.stack
-        val stackCopy = stack!!.copy()
+        val stackSingle = stack!!.copy()
+        stackSingle.stackSize = 1
 
         val startIndex: Int
         val endIndex: Int
 
-        if (slotIndex < 9) {
-            return null
-        } else if (slotIndex < 18) {
-            startIndex = 18
-            endIndex = 18 + 27 + 9
-        } else {
-            startIndex = 9
-            endIndex = 18
-        }
+        /*for(curSlot in 0..8) {
+            if(inventoryItemStacks[curSlot] != null) {
+                if(inventoryItemStacks[curSlot].isItemEqual(stack)) {
+                    break;
+                }
+                else { }
+            }
+            else {
+                inventorySlots[curSlot].putStack(stackSingle)
+            }
+        }*/
 
-        if (!this.mergeItemStack(stack, startIndex, endIndex, false)) {
-            return null
-        }
-
-        if (stack.stackSize == 0) {
-            slot.putStack(null)
-        } else {
-            slot.onSlotChanged()
-        }
-
-        if (stack.stackSize == stackCopy.stackSize) {
-            return null
-        }
-
-        slot.onPickupFromSlot(player, stack)
-        return stackCopy
+        return null
     }
 }

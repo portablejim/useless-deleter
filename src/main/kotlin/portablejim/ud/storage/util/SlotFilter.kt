@@ -19,6 +19,7 @@ class SlotFilter(var filterHandler: FilterItemHandler, val index: Int, xPosition
     }
 
     override fun decrStackSize(par1: Int): ItemStack? {
+        filterHandler.extractItem(index, par1, false)
         return null
     }
 
