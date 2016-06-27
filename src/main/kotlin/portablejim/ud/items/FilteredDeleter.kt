@@ -36,7 +36,7 @@ class FilteredDeleter(regName: String): Item() {
 
     val ACTIVATE_KEY: String = "UD_Activate"
 
-    override fun onItemRightClick(itemStackIn: ItemStack?, worldIn: World?, playerIn: EntityPlayer?, hand: EnumHand?): ActionResult<ItemStack>? {
+    override fun onItemRightClick(itemStackIn: ItemStack?, worldIn: World?, playerIn: EntityPlayer?, hand: EnumHand?): ActionResult<ItemStack?>? {
         // Has inventory capability or null
         val inventoryCap: IItemHandler? = if(playerIn?.hasCapability(UselessDeleterMod.INVENTORY_CAP, null) ?: false) {
             playerIn?.getCapability(UselessDeleterMod.INVENTORY_CAP, null) ?: null
@@ -44,17 +44,29 @@ class FilteredDeleter(regName: String): Item() {
             null
         }
 
-        if(inventoryCap != null && playerIn?.isSneaking ?: false) {
-            val tagCompound: NBTTagCompound = itemStackIn?.tagCompound ?: NBTTagCompound()
-
-            val activated: Boolean = tagCompound.getBoolean(ACTIVATE_KEY)
-
-            tagCompound.setBoolean(ACTIVATE_KEY, !activated)
-
-            itemStackIn?.tagCompound = tagCompound
+        if(inventoryCap != null && worldIn != null) {
+            if (playerIn?.isSneaking ?: false) {
+                if(!worldIn.isRemote) {
+                    playerIn?.openGui(UselessDeleterMod, 0, worldIn, if(hand == EnumHand.MAIN_HAND) 0 else 1, 0, 0)
+                    return ActionResult(EnumActionResult.SUCCESS, itemStackIn)
+                }
+            }
+            else {
+                toggleActive(itemStackIn)
+            }
         }
 
         return super.onItemRightClick(itemStackIn, worldIn, playerIn, hand)
+    }
+
+    fun toggleActive(itemStackIn: ItemStack?) {
+        val tagCompound: NBTTagCompound = itemStackIn?.tagCompound ?: NBTTagCompound()
+
+        val activated: Boolean = tagCompound.getBoolean(ACTIVATE_KEY)
+
+        tagCompound.setBoolean(ACTIVATE_KEY, !activated)
+
+        itemStackIn?.tagCompound = tagCompound
     }
 
     override fun hasEffect(stack: ItemStack?): Boolean {

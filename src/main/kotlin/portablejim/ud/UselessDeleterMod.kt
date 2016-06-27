@@ -4,11 +4,13 @@ import net.minecraft.item.ItemStack
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.common.capabilities.CapabilityInject
+import net.minecraftforge.common.network.ForgeNetworkHandler
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.SidedProxy
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
+import net.minecraftforge.fml.common.network.NetworkRegistry
 import net.minecraftforge.fml.common.registry.GameRegistry
 import net.minecraftforge.items.IItemHandler
 import net.minecraftforge.oredict.ShapedOreRecipe
@@ -17,6 +19,7 @@ import org.apache.logging.log4j.Logger
 import portablejim.ud.capabilities.UsedCapabilities
 import portablejim.ud.items.FilteredDeleter
 import portablejim.ud.proxy.CommonProxy
+import portablejim.ud.storage.GuiHandler
 
 /**
  * UselessDeleter Mod file.
@@ -33,6 +36,8 @@ object UselessDeleterMod {
 
     // Items
     lateinit var filteredDeleter: FilteredDeleter
+
+    lateinit var guiHandler: GuiHandler
 
     // Capabilities
     lateinit var INVENTORY_CAP: Capability<IItemHandler>
@@ -63,6 +68,9 @@ object UselessDeleterMod {
         MinecraftForge.EVENT_BUS.register(filteredDeleter)
 
         GameRegistry.addRecipe(ShapedOreRecipe(ItemStack(filteredDeleter), "SSS", "SCS", "SSS", 'S', "cobblestone", 'C', "chestWood"))
+
+        guiHandler = GuiHandler()
+        NetworkRegistry.INSTANCE.registerGuiHandler(this, guiHandler)
     }
 
     @Mod.EventHandler
