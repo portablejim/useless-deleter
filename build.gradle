@@ -52,6 +52,19 @@ configFile.withReader {
     ext.config = new ConfigSlurper().parse prop
 }
 
+configurations {
+    shade
+    compile.extendsFrom shade
+    runtime.extendsFrom shade
+    deployerJars
+}
+
+dependencies {
+    shade 'org.jetbrains.kotlin:kotlin-stdlib:1.0.2'
+    shade files('libs/kotlin-adapter-1.0.2+1.10.jar')
+}
+
+
 version = config.mod_version
 group= "portablejim.ud.uselessdeleter" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "UselessDeleter"
@@ -96,17 +109,6 @@ build.dependsOn deobfJar
 
 artifacts {
     archives deobfJar
-}
-
-configurations {
-    shade
-    compile.extendsFrom shade
-    deployerJars
-}
-
-dependencies {
-    shade 'org.jetbrains.kotlin:kotlin-stdlib:1.0.2'
-    shade files('libs/kotlin-adapter-1.0.2+1.10.jar')
 }
 
 jar {
