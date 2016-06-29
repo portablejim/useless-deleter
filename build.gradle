@@ -158,7 +158,7 @@ curseforge {
     else apiKey = 0
     //debug = true
     project {
-        id = '238403'
+        id = '246832'
         changelog = new File('Changelog.md').getText('utf-8').split('\n-{3,8}|\n\n')[2]
         changelogType = 'text'
         releaseType = 'alpha' // Just a default
