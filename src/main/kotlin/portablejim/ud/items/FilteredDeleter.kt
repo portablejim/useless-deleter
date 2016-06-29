@@ -14,6 +14,7 @@ import net.minecraftforge.fml.common.eventhandler.Event
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.items.IItemHandler
 import portablejim.ud.UselessDeleterMod
+import portablejim.ud.storage.FilterItemHandler
 import java.util.*
 
 /**
@@ -119,32 +120,16 @@ class FilteredDeleter(regName: String): Item() {
     }
 
     fun handleStack(deleter: ItemStack, targetStack: ItemStack) {
-        val deleteList: Set<String> = setOf(
-                "minecraft:stone",
-                "minecraft:cobblestone",
-                "minecraft:granite",
-                "minecraft:diorite",
-                "minecraft:andesite",
-                "minecraft:coarse_dirt",
-                "minecraft:clay",
-                "minecraft:clay_ball",
-                "minecraft:hardened_clay",
-                "minecraft:stained_hardened_clay",
-                "minecraft:netherrack",
-                "minecraft:sand",
-                "minecraft:sandstone",
-                "minecraft:soul_sand",
-                "minecraft:poisonous_potato",
-                "minecraft:snowball",
-                "minecraft:packed_ice"
-        )
+        if (deleter.hasEffect()) {
+            val itemWhitelist: List<ItemStack> = FilterItemHandler(deleter).filterList.filterIsInstance<ItemStack>()
+            val itemNameWhitelist: Set<String> = itemWhitelist.map { it.item?.registryName.toString() }.toSet()
+            val isMatched: Boolean = targetStack.item?.registryName?.toString().run { itemNameWhitelist.contains(this) }
 
-        if(deleter.hasEffect()) {
-            if(deleteList.contains(Item.REGISTRY.getNameForObject(targetStack.item).toString())) {
+            if (isMatched) {
                 targetStack.stackSize = 0
             }
-            UselessDeleterMod.log.info("Picked up: ${REGISTRY.getNameForObject(targetStack.item).toString()}")
         }
+        UselessDeleterMod.log.info("Picked up: ${REGISTRY.getNameForObject(targetStack.item).toString()}")
     }
 
 }

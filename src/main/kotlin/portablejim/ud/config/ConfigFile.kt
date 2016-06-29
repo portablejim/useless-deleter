@@ -1,6 +1,7 @@
 package portablejim.ud.config
 
 import net.minecraftforge.common.config.Configuration
+import net.minecraftforge.oredict.OreDictionary
 import java.util.*
 
 /**
@@ -41,8 +42,22 @@ object Config {
         whitelist = configFile.getStringList("useless_blocks", Configuration.CATEGORY_GENERAL.toString(), DELETE_BLOCKS_DEFAULT.toTypedArray(), DELETE_BLOCKS_DESCRIPTION).toMutableList() ?: mutableListOf<String>()
         whitelist_oredict = configFile.getStringList("useless_oredictionary", Configuration.CATEGORY_GENERAL.toString(), DELETE_OREDICT_DEFAULT.toTypedArray(), DELETE_OREDICT_DESCRIPTION).toMutableList() ?: mutableListOf<String>()
 
+        built_whitelist = buildWhitelist(whitelist, whitelist_oredict)
+
         if(configFile.hasChanged()) {
             configFile.save();
         }
     }
+
+    var built_whitelist = whitelist.toSet()
+
+    fun buildWhitelist(initialEntries: List<String>, entriesToAdd: List<String>): Set<String> {
+
+        val oredictEntries = entriesToAdd.map { OreDictionary.getOres(it) }.flatten()
+        val oredictStringsAny = oredictEntries.map { it.item?.registryName }.plus(initialEntries).filterNotNull()
+        val oredictStrings: List<String> = oredictStringsAny.filterIsInstance<String>()
+
+        return oredictStrings.toSet()
+    }
+
 }
