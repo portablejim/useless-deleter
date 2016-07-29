@@ -58,51 +58,52 @@ class FilterContainer(playerInventory: InventoryPlayer, val filterHandler: Filte
     }
 
     override fun slotClick(slotId: Int, clickedButton: Int, mode: ClickType?, playerIn: EntityPlayer): ItemStack? {
-        if (slotId >= 0 && slotId < 9) {
-            if (mode == ClickType.PICKUP || mode == ClickType.PICKUP_ALL ||
-                    mode == ClickType.SWAP)
-            // 1 is shift-click
-            {
-                val slot = this.inventorySlots[slotId]
+        if (slotId >= 0) {
+            if (slotId < 9) {
+                if (mode == ClickType.PICKUP || mode == ClickType.PICKUP_ALL ||
+                        mode == ClickType.SWAP)
+                // 1 is shift-click
+                {
+                    val slot = this.inventorySlots[slotId]
 
-                val dropping = playerIn.inventory.itemStack
+                    val dropping = playerIn.inventory.itemStack
 
-                if (dropping != null) {
-                    val copy = dropping.copy()
-                    copy.stackSize = 1
-                    slot.putStack(copy)
-                } else if (slot.stack != null) {
-                    slot.decrStackSize(1)
+                    if (dropping != null) {
+                        val copy = dropping.copy()
+                        copy.stackSize = 1
+                        slot.putStack(copy)
+                    } else if (slot.stack != null) {
+                        slot.decrStackSize(1)
+                    }
+
+                    detectAndSendChanges()
+
+                    return null
                 }
 
-                detectAndSendChanges()
-
                 return null
-            }
-
-            return null
-        }
-        else {
-            val source = inventorySlots[slotId].stack
-            if(mode == ClickType.QUICK_MOVE) {
-                if(source != null) {
-                    for (curSlot in 0..8) {
-                        if (inventorySlots[curSlot].stack != null) {
-                            if (inventorySlots[curSlot].stack?.isItemEqual(source) ?: false) {
-                                break;
+            } else {
+                val source = inventorySlots[slotId].stack
+                if (mode == ClickType.QUICK_MOVE) {
+                    if (source != null) {
+                        for (curSlot in 0..8) {
+                            if (inventorySlots[curSlot].stack != null) {
+                                if (inventorySlots[curSlot].stack?.isItemEqual(source) ?: false) {
+                                    break;
+                                } else {
+                                }
                             } else {
-                            }
-                        } else {
-                            val stackSingle = source.copy()
-                            if (stackSingle != null) {
-                                stackSingle.stackSize = 1
-                                inventorySlots[curSlot].putStack(stackSingle)
-                                break
+                                val stackSingle = source.copy()
+                                if (stackSingle != null) {
+                                    stackSingle.stackSize = 1
+                                    inventorySlots[curSlot].putStack(stackSingle)
+                                    break
+                                }
                             }
                         }
                     }
+                    return source
                 }
-                return source
             }
         }
 
