@@ -42,6 +42,8 @@ object UselessDeleterMod {
 
     // Items
     lateinit var filteredDeleter: FilteredDeleter
+    lateinit var strictFilteredDeleter: FilteredDeleter
+    lateinit var openFilteredDeleter: FilteredDeleter
 
     lateinit var guiHandler: GuiHandler
     lateinit var config: Configuration
@@ -60,11 +62,17 @@ object UselessDeleterMod {
         Config.syncConfig(config)
 
         // Items
-        filteredDeleter = FilteredDeleter("filtered_deleter")
+        filteredDeleter = FilteredDeleter("filtered_deleter", true, true)
+        strictFilteredDeleter = FilteredDeleter("filtered_deleter_strict", true, false)
+        openFilteredDeleter = FilteredDeleter("filtered_deleter_open", false, false)
 
         filteredDeleter.unlocalizedName = "${MOD_ID}.filtered"
+        strictFilteredDeleter.unlocalizedName = "${MOD_ID}.filteredstrict"
+        openFilteredDeleter.unlocalizedName = "${MOD_ID}.filteredopen"
 
         GameRegistry.register(filteredDeleter)
+        GameRegistry.register(strictFilteredDeleter)
+        GameRegistry.register(openFilteredDeleter)
 
 
         proxy.specialPreInit()
@@ -78,6 +86,7 @@ object UselessDeleterMod {
         MinecraftForge.EVENT_BUS.register(filteredDeleter)
 
         GameRegistry.addRecipe(ShapedOreRecipe(ItemStack(filteredDeleter), "SPS", "PHP", "RPR", 'S', "string", 'P', "paper", 'H', Blocks.HOPPER, 'R', "dustRedstone"))
+        GameRegistry.addRecipe(ShapedOreRecipe(ItemStack(strictFilteredDeleter), "OPO", "PHP", "OPO", 'O', "obsidian", 'P', "paper", 'H', Blocks.HOPPER))
 
         guiHandler = GuiHandler()
         NetworkRegistry.INSTANCE.registerGuiHandler(this, guiHandler)

@@ -21,7 +21,7 @@ import java.util.*
  * Created by james on 25/06/16.
  */
 
-class FilteredDeleter(regName: String): Item() {
+class FilteredDeleter(regName: String, val forceWhitelist: Boolean, val ignoreMeta: Boolean): Item() {
     init {
         setRegistryName(regName)
         creativeTab = CreativeTabs.TOOLS
@@ -123,9 +123,14 @@ class FilteredDeleter(regName: String): Item() {
         if (deleter.hasEffect()) {
             val itemWhitelist: List<ItemStack> = FilterItemHandler(deleter).filterList.filterIsInstance<ItemStack>()
             val itemNameWhitelist: Set<String> = itemWhitelist.map { it.item?.registryName.toString() }.toSet()
-            val isMatched: Boolean = targetStack.item?.registryName?.toString().run { itemNameWhitelist.contains(this) }
+            val isMatched: Boolean = if(this.ignoreMeta) {
+                targetStack.item?.registryName?.toString().run { itemNameWhitelist.contains(this) }
+            }
+            else {
+                itemWhitelist.filter { it.isItemEqual(targetStack) }.isNotEmpty()
+            }
 
-            if (isMatched) {
+            if (isMatched || !this.forceWhitelist) {
                 targetStack.stackSize = 0
             }
         }
