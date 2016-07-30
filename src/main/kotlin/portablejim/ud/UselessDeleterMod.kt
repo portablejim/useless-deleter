@@ -1,5 +1,6 @@
 package portablejim.ud
 
+import net.minecraft.init.Blocks
 import net.minecraft.item.ItemStack
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.common.capabilities.Capability
@@ -76,7 +77,7 @@ object UselessDeleterMod {
 
         MinecraftForge.EVENT_BUS.register(filteredDeleter)
 
-        GameRegistry.addRecipe(ShapedOreRecipe(ItemStack(filteredDeleter), "SSS", "SCS", "SSS", 'S', "cobblestone", 'C', "chestWood"))
+        GameRegistry.addRecipe(ShapedOreRecipe(ItemStack(filteredDeleter), "SPS", "PHP", "RPR", 'S', "string", 'P', "paper", 'H', Blocks.HOPPER, 'R', "dustRedstone"))
 
         guiHandler = GuiHandler()
         NetworkRegistry.INSTANCE.registerGuiHandler(this, guiHandler)
