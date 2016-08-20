@@ -6,6 +6,7 @@ import net.minecraft.inventory.ClickType
 import net.minecraft.inventory.Container
 import net.minecraft.inventory.Slot
 import net.minecraft.item.ItemStack
+import portablejim.ud.items.FilteredDeleter
 import portablejim.ud.storage.util.SlotDisabled
 import portablejim.ud.storage.util.SlotFilter
 
@@ -58,7 +59,7 @@ class FilterContainer(playerInventory: InventoryPlayer, val filterHandler: Filte
     }
 
     override fun slotClick(slotId: Int, clickedButton: Int, mode: ClickType?, playerIn: EntityPlayer): ItemStack? {
-        if (slotId >= 0) {
+        if (slotId >= 0 && filterHandler.currentItem.item is FilteredDeleter) {
             if (slotId < 9) {
                 if (mode == ClickType.PICKUP || mode == ClickType.PICKUP_ALL ||
                         mode == ClickType.SWAP)
