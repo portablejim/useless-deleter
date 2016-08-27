@@ -120,7 +120,7 @@ class FilteredDeleter(regName: String, val forceWhitelist: Boolean, val ignoreMe
     }
 
     fun handleStack(deleter: ItemStack, targetStack: ItemStack) {
-        if (deleter.hasEffect()) {
+        if (deleter.item.hasEffect(deleter)) {
             val itemWhitelist: List<ItemStack> = FilterItemHandler(deleter).filterList.filterIsInstance<ItemStack>()
             val itemNameWhitelist: Set<String> = itemWhitelist.map { it.item?.registryName.toString() }.toSet()
             val isMatched: Boolean = if(this.ignoreMeta) {
