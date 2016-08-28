@@ -11,7 +11,7 @@ import portablejim.ud.items.FilteredDeleter
 import java.util.*
 
 /**
- * Created by james on 26/06/16.
+ * Actually handle item filter.
  */
 class FilterItemHandler(val currentItem: ItemStack): IItemHandler {
 
@@ -30,12 +30,12 @@ class FilterItemHandler(val currentItem: ItemStack): IItemHandler {
     }
 
     private fun loadFromNBT(tagCompound: NBTTagCompound) {
-        val NBT_TAGLIST = 10;
-        val tagList = tagCompound.getTagList("UD_Filter", NBT_TAGLIST);
+        val NBT_TAGLIST = 10
+        val tagList = tagCompound.getTagList("UD_Filter", NBT_TAGLIST)
 
         for(i in 0..tagList.tagCount()) {
-            val itemTag = tagList.getCompoundTagAt(i);
-            val slot = if (itemTag.hasKey("UD_FilterItem")) itemTag.getInteger("UD_FilterItem") else -1;
+            val itemTag = tagList.getCompoundTagAt(i)
+            val slot = if (itemTag.hasKey("UD_FilterItem")) itemTag.getInteger("UD_FilterItem") else -1
 
             if(slot >= 0 && slot < 9 && itemTag != null) {
                 filterList[slot] = ItemStack.loadItemStackFromNBT(itemTag)
@@ -65,14 +65,14 @@ class FilterItemHandler(val currentItem: ItemStack): IItemHandler {
 
     override fun extractItem(slot: Int, amount: Int, simulate: Boolean): ItemStack? {
         if(!simulate) {
-            filterList.set(slot, null)
+            filterList[slot] = null
         }
         return null
     }
 
     fun saveSlots() {
         val tagList = NBTTagList()
-        for(slot in 0..(getSlots()-1)) {
+        for(slot in 0..(slots -1)) {
             val stack = filterList[slot]
             if(stack != null) {
                 val itemTag = NBTTagCompound()
