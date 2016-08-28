@@ -3,8 +3,11 @@ package portablejim.ud.storage
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.nbt.NBTTagList
+import net.minecraftforge.fml.common.registry.ForgeRegistries
 import net.minecraftforge.items.IItemHandler
 import portablejim.ud.UselessDeleterMod
+import portablejim.ud.config.Config
+import portablejim.ud.items.FilteredDeleter
 import java.util.*
 
 /**
@@ -13,6 +16,7 @@ import java.util.*
 class FilterItemHandler(val currentItem: ItemStack): IItemHandler {
 
     var filterList: MutableList<ItemStack?> = ArrayList(9)
+    val useWhitelist = currentItem.item is FilteredDeleter && (currentItem.item as FilteredDeleter).forceWhitelist
 
     init {
         val filterNbt = currentItem.tagCompound ?: NBTTagCompound()
@@ -20,6 +24,7 @@ class FilterItemHandler(val currentItem: ItemStack): IItemHandler {
         for(i in 0..9) {
             filterList.add(null)
         }
+
 
         loadFromNBT(filterNbt)
     }
@@ -45,9 +50,11 @@ class FilterItemHandler(val currentItem: ItemStack): IItemHandler {
 
     override fun insertItem(slot: Int, stack: ItemStack?, simulate: Boolean): ItemStack? {
         if(!simulate && stack != null && slot < filterList.size) {
-            val ourStack = stack.copy()
-            ourStack.stackSize = 1
-            filterList[slot] = ourStack
+            if(!useWhitelist || Config.built_whitelist.contains(ForgeRegistries.ITEMS.getKey(stack.item).toString())) {
+                val ourStack = stack.copy()
+                ourStack.stackSize = 1
+                filterList[slot] = ourStack
+            }
         }
         return stack
     }
