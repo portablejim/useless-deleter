@@ -1,2 +1,4 @@
 
 item.uselessdeleter.filtered.name=Filtered Deleter
+item.uselessdeleter.filteredstrict.name=Strict Filtered Deleter
+item.uselessdeleter.filteredopen.name=Open Filtered Deleter
