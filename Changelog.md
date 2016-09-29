@@ -1,6 +1,9 @@
 Changelog
 ---------
 
+0.1.1
+------
+
 0.1.0
 ------
 * Make filtered deleter actually work properly.

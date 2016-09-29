@@ -134,7 +134,7 @@ class FilteredDeleter(regName: String, val forceWhitelist: Boolean, val ignoreMe
                 targetStack.stackSize = 0
             }
         }
-        UselessDeleterMod.log.info("Picked up: ${REGISTRY.getNameForObject(targetStack.item).toString()}")
+        //UselessDeleterMod.log.info("Picked up: ${REGISTRY.getNameForObject(targetStack.item).toString()}")
     }
 
 }
